@@ -2,12 +2,9 @@ package Model;
 
 import java.util.*;
 
-import Persistence.myFile;
-
 public class Biblioteca {
 
     ArrayList<ColeccionBibliografica> CB ;
-    myFile datos ;
     String rutaArchivo;
     String nombreArchivo;
     //Numero de libros que han existido en la biblioteca
@@ -17,25 +14,16 @@ public class Biblioteca {
 
     public Biblioteca() {
         this.CB = new ArrayList<ColeccionBibliografica>();
-        this.datos = new myFile();
         this.rutaArchivo = "C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/data/";
         this.nombreArchivo = "colecciones.txt";
         this.numeroHistoricoLibros = 0;
     }
 
-    public void cargarArchivo(){
-        this.CB = datos.cargarDatos(rutaArchivo, nombreArchivo);
+    public void cargarNumeroHistorico(){
+        //Se recorren las colecciones bibliograficas para aumentar el numero historico de libros
         for (ColeccionBibliografica CB: this.CB){
             numeroHistoricoLibros += CB.getNumeroLibros();
         }
-    }
-
-    public void guardarArchivo(){
-        datos.escribirArchivo(rutaArchivo, nombreArchivo, CB);
-    }
-
-    public void eliminarArchivo(){
-        datos.eliminarArchivo(rutaArchivo, nombreArchivo);
     }
     public void crearLibro(int id, String titulo, String autor, String editorial, String areaConocimiento){
         Libro libro = new Libro(id, titulo, autor, editorial, areaConocimiento, "Disponible");
@@ -157,6 +145,11 @@ public class Biblioteca {
 
     public int getNumeroHistoricoLibros(){
         return numeroHistoricoLibros;
+    }
+
+    public void setNumeroHistoricoLibros(int numeroHistoricoLibros) {
+        this.numeroHistoricoLibros = numeroHistoricoLibros;
+
     }
 
     public void setCB(ArrayList<ColeccionBibliografica> CB) {

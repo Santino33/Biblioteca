@@ -48,6 +48,11 @@ public class View {
         return JOptionPane.showInputDialog(null, message, "ELIMINAR LIBRO", JOptionPane.PLAIN_MESSAGE, scaleImage(book), null, null).toString();
     }
 
+    public String login(String message){
+        ImageIcon book = new ImageIcon("C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/src/Iomanager/log.jpeg");
+        return JOptionPane.showInputDialog(null, message, "LOGIN", JOptionPane.PLAIN_MESSAGE, scaleImage(book), null, null).toString();
+    }
+
     public int mostrarMenuPrincipal(){
         String output = "Bienvenido a la biblioteca central, estos son nuestros servicios: \n"+
                 "1. Registrar libro\n"+

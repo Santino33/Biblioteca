@@ -4,6 +4,7 @@ import Model.ColeccionBibliografica;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 public class myFile {
@@ -57,6 +58,7 @@ public class myFile {
             archivo.delete();
         }
     }
+
 
 
 }

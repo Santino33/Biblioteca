@@ -4,6 +4,8 @@ import Iomanager.View;
 import Model.Biblioteca;
 import Model.ColeccionBibliografica;
 import Model.Libro;
+import Persistence.PropertiesFile;
+import Persistence.myFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +13,45 @@ import java.util.Map;
 
 public class Control {
 
-    View view = new View();
-    Biblioteca biblio = new Biblioteca();
+    String rutaArchivo;
+    String nombreArchivo;
+    String nombreProperties;
+    View view;
+    myFile datosFile;
+    PropertiesFile propertiesFile;
+    Biblioteca biblio;
+
+    public Control(){
+
+        this.view = new View();
+        this.rutaArchivo = "C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/data/";
+        this.nombreArchivo = "colecciones.txt";
+        this.nombreProperties = "props.properties";
+        this.datosFile = new myFile();
+        this.propertiesFile = new PropertiesFile();
+        this.biblio = new Biblioteca();
+    }
+
+    public boolean login(){
+        String rutaProp = rutaArchivo + nombreProperties;
+        if (!propertiesFile.existeArchivo(rutaProp)) {
+            propertiesFile.crearPropertiesFile(rutaProp, "userAdmin", "admin12345" );
+        }
+        String username = view.login("Ingrese su nombre de usuario");
+        String password = view.login("Ingrese su contraseña");
+        if (password.equals(propertiesFile.leerPropertiesFile(rutaProp, username))){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     public void manageApp(){
+        if (!login()) {
+            view.showGraphicErrorMessage("Usuario o contraseña incorrectos");
+            manageApp();
+        }
         int option = view.mostrarMenuPrincipal();
         switch (option){
             case 1 -> crearLibro();
@@ -31,12 +68,27 @@ public class Control {
     }
 
     private void cargarArchivo(){
-        biblio.cargarArchivo();
+        biblio.setCB(datosFile.cargarDatos(rutaArchivo, nombreArchivo));
+        //Aumentar el numero historico de libros
+        biblio.cargarNumeroHistorico();
         manageApp();
     }
 
+
+
+    /*
+    public void cargarArchivo(){
+        //Se cargan datos del archivo al arraylist
+        this.CB = datos.cargarDatos(rutaArchivo, nombreArchivo);
+        //Se recorren las colecciones bibliograficas para aumentar el numero historico de libros
+        for (ColeccionBibliografica CB: this.CB){
+            numeroHistoricoLibros += CB.getNumeroLibros();
+        }
+    }
+     */
+
     private void guardarArchivo(){
-        biblio.guardarArchivo();
+        datosFile.escribirArchivo(rutaArchivo, nombreArchivo, biblio.getCB());
         manageApp();
     }
     private void crearLibro(){
@@ -110,7 +162,7 @@ public class Control {
     private void eliminarArchivo(){
         boolean option = view.eliminarArchivo("¿Esta seguro que desa eliminar el archivo? Todos los datos se perderán\n Y/N");
         if (option){
-            biblio.eliminarArchivo();
+            datosFile.eliminarArchivo(rutaArchivo, nombreArchivo);
         }
         manageApp();
     }
