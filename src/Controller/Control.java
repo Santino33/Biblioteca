@@ -4,6 +4,7 @@ import Iomanager.View;
 import Model.Biblioteca;
 import Model.ColeccionBibliografica;
 import Model.Libro;
+import Persistence.BinariesFile;
 import Persistence.PropertiesFile;
 import Persistence.myFile;
 
@@ -19,10 +20,13 @@ public class Control {
     String rutaArchivo;
     String nombreArchivo;
     String nombreProperties;
+    String nombreBinaries;
     View view;
     myFile datosFile;
     PropertiesFile propertiesFile;
+    BinariesFile binariesFile;
     Biblioteca biblio;
+
 
     public Control(){
 
