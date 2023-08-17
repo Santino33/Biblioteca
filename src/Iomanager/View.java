@@ -90,7 +90,7 @@ public class View {
         showGraphicMessage(String.valueOf(output));
     }
 
-    public void mostrarLibros(ArrayList<ColeccionBibliografica> CB){
+    public void mostrarLibros(ArrayList<ColeccionBibliografica> CB, String fecha){
         StringBuilder output = new StringBuilder();
         output.append("  ID       Titulo               Autor\n");
         for (ColeccionBibliografica coleccionBibliografica : CB) {
@@ -102,6 +102,8 @@ public class View {
                 output.append("\n");
             }
         }
+        output.append("\n");
+        output.append("Ultimo cambio realizado: ").append(fecha);
         showGraphicMessage(output.toString());
     }
 

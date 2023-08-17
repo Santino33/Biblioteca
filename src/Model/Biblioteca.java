@@ -10,6 +10,7 @@ public class Biblioteca {
     //Numero de libros que han existido en la biblioteca
     int numeroHistoricoLibros;
     //Cargue y escritura
+    String fechaUltimoCambio;
 
 
     public Biblioteca() {
@@ -17,6 +18,7 @@ public class Biblioteca {
         this.rutaArchivo = "C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/data/";
         this.nombreArchivo = "colecciones.txt";
         this.numeroHistoricoLibros = 0;
+        this.fechaUltimoCambio = "";
     }
 
     public void cargarNumeroHistorico(){
@@ -150,6 +152,14 @@ public class Biblioteca {
     public void setNumeroHistoricoLibros(int numeroHistoricoLibros) {
         this.numeroHistoricoLibros = numeroHistoricoLibros;
 
+    }
+
+    public String getFechaUltimoCambio() {
+        return fechaUltimoCambio;
+    }
+
+    public void setFechaUltimoCambio(String fechaUltimoCambio) {
+        this.fechaUltimoCambio = fechaUltimoCambio;
     }
 
     public void setCB(ArrayList<ColeccionBibliografica> CB) {

@@ -7,7 +7,10 @@ import Model.Libro;
 import Persistence.PropertiesFile;
 import Persistence.myFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,30 +31,30 @@ public class Control {
         this.nombreArchivo = "colecciones.txt";
         this.nombreProperties = "props.properties";
         this.datosFile = new myFile();
-        this.propertiesFile = new PropertiesFile();
+        this.propertiesFile = new PropertiesFile(rutaArchivo + nombreProperties);
         this.biblio = new Biblioteca();
     }
 
-    public boolean login(){
-        String rutaProp = rutaArchivo + nombreProperties;
-        if (!propertiesFile.existeArchivo(rutaProp)) {
-            propertiesFile.crearPropertiesFile(rutaProp, "userAdmin", "admin12345" );
+    public void app(){
+        if (!login()) {
+            view.showGraphicErrorMessage("Usuario o contraseña incorrectos");
+            app();
         }
+        manageApp();
+    }
+
+    public boolean login(){
+        if (propertiesFile.crearArchivo()){
+            propertiesFile.crearPropiedad("userAdmin", "admin12345");
+        }
+        //propertiesFile.createPropertiesFile(rutaProp, "userAdmin", "admin12345" );
+        //propertiesFile.createPropertiesFile(rutaProp, "fechaUltimoCambio",  "" );
         String username = view.login("Ingrese su nombre de usuario");
         String password = view.login("Ingrese su contraseña");
-        if (password.equals(propertiesFile.leerPropertiesFile(rutaProp, username))){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return password.equals(propertiesFile.getValue(username));
     }
 
     public void manageApp(){
-        if (!login()) {
-            view.showGraphicErrorMessage("Usuario o contraseña incorrectos");
-            manageApp();
-        }
         int option = view.mostrarMenuPrincipal();
         switch (option){
             case 1 -> crearLibro();
@@ -71,6 +74,8 @@ public class Control {
         biblio.setCB(datosFile.cargarDatos(rutaArchivo, nombreArchivo));
         //Aumentar el numero historico de libros
         biblio.cargarNumeroHistorico();
+
+        biblio.setFechaUltimoCambio(propertiesFile.getValue("fechaUltimoCambio"));
         manageApp();
     }
 
@@ -89,6 +94,7 @@ public class Control {
 
     private void guardarArchivo(){
         datosFile.escribirArchivo(rutaArchivo, nombreArchivo, biblio.getCB());
+        propertiesFile.crearPropiedad("fechaUltimoCambio", biblio.getFechaUltimoCambio());
         manageApp();
     }
     private void crearLibro(){
@@ -98,6 +104,7 @@ public class Control {
         String autor = view.readLibro("Ingresa el autor del libro");
         String editorial = view.readLibro("Ingresa la editorial del libro");
         String areaConocimiento = view.readLibro("Ingresa el area de conocimiento del libro");
+        biblio.setFechaUltimoCambio(getCurrentTime());
 
         biblio.crearLibro(id, titulo, autor, editorial, areaConocimiento);
         manageApp();
@@ -119,6 +126,7 @@ public class Control {
             case 5 -> editarEstado(id);
             case 6 -> manageApp();
         }
+        biblio.setFechaUltimoCambio(getCurrentTime());
         manageApp();
     }
     private void editarTitulo(int id){
@@ -145,6 +153,7 @@ public class Control {
     private void eliminiarLibro(){
         int id = view.deleteLibro("¿Cual es el id del libro a ELIMINAR?");
         biblio.eliminarLibro(id);
+        biblio.setFechaUltimoCambio(getCurrentTime());
         manageApp();
     }
 
@@ -182,11 +191,16 @@ public class Control {
 
     public void mostrarLibros(){
         ArrayList<ColeccionBibliografica> CB = biblio.getCB();
-        view.mostrarLibros(CB);
+        view.mostrarLibros(CB, biblio.getFechaUltimoCambio());
         manageApp();
     }
 
-
+    public String getCurrentTime(){
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+        String fechaFormateada = fechaHoraActual.getYear() + " - " + fechaHoraActual.getMonth() + " - " + fechaHoraActual.getDayOfMonth() + "\n" +
+                fechaHoraActual.getHour() + ":" + fechaHoraActual.getMinute() + ":" + fechaHoraActual.getSecond();
+        return fechaFormateada;
+    }
 
 
 }
