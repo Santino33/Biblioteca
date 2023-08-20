@@ -4,6 +4,12 @@ import Model.Libro;
 
 import java.io.*;
 
+/*
+Para leer y escribir mas de 1 tipo de dato en un archivo .bin hay que manejar la escritura y
+lectura de todos los datos que queramos manejar en un solo metodo, ya que si abrimos varias veces
+el archivo para guardar datos por separado, cada vez que abramos el archivo, este va a cambiar
+automaticamente
+ */
 public class BinariesFile {
 
     String filePath;
@@ -20,26 +26,50 @@ public class BinariesFile {
 
 //METODOS DE LECTURA
     public void leerDatos(){
-        int librosTotal = leerInt();
-        int coleccionesTotal = leerInt();
-        Libro libro = leerLibro();
+        int numeroLibros = 0;
+        int numeroColecciones = 0;
+        Libro libro = null;
+        try(FileInputStream fileInput = new FileInputStream(filePath)){
+            DataInputStream dataInput = new DataInputStream(fileInput);
+            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+            numeroLibros = dataInput.readInt();
+            numeroColecciones = dataInput.readInt();
+            libro = (Libro) objectInput.readObject();
+        }catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Error entrada - salida " + e.getMessage());
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+            System.out.println("Clase no encontrada " + e.getMessage());
+        }
 
-        setlibrosTotal(librosTotal);
-        setcolecciones(coleccionesTotal);
+        setlibrosTotal(numeroLibros);
+        setcolecciones(numeroColecciones);
         setLibro(libro);
     }
 
-    private int leerInt(){
-        int intLeido = 0;
+    /*
+    private int leerValores(){
+        int numeroLibros = 0;
+        int numeroColecciones = 0;
+        Libro libro = null;
         try(FileInputStream fileInput = new FileInputStream(filePath)){
             DataInputStream dataInput = new DataInputStream(fileInput);
-            intLeido = dataInput.readInt();
+            ObjectInputStream objectInput = new ObjectInputStream(fileInput);
+            numeroLibros = dataInput.readInt();
+            numeroColecciones = dataInput.readInt();
+            libro = (Libro) objectInput.readObject();
         }catch (IOException e){
             e.printStackTrace();
-            System.out.println("Error entrada - salida" + e.getMessage());
+            System.out.println("Error entrada - salida " + e.getMessage());
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+            System.out.println("Clase no encontrada " + e.getMessage());
         }
-        return intLeido;
+
     }
+
+     */
 
     private Libro leerLibro(){
         Libro libro = null;
@@ -60,9 +90,7 @@ public class BinariesFile {
 //METODOS DE ESCRITURA
     public void escrituraDatos(int numeroLibrosTotales, int numeroColecciones, Libro libro){
         crearArchivoBin();
-        escribirInt(numeroLibrosTotales);
-        escribirInt(numeroColecciones);
-        escribirLibro(libro);
+        escribirValores(numeroLibrosTotales, numeroColecciones, libro);
     }
 
     private boolean crearArchivoBin() {
@@ -78,27 +106,15 @@ public class BinariesFile {
         return created;
     }
 
-    private void escribirLibro(Libro libro){
-        File archivoBin = getFile();
-
-        try(FileOutputStream fos = new FileOutputStream(archivoBin);){
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            oos.writeObject(libro);
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-            System.out.println("Archivo no encontrado");
-        }catch (IOException e){
-            e.printStackTrace();
-            System.out.println("Error de entrada - salida" + e.getMessage());
-        }
-    }
-
-    private void escribirInt(int valor){
+    private void escribirValores(int numeroLibros, int numeroColecciones, Libro libro){
         try(FileOutputStream fos = new FileOutputStream(filePath)){
             DataOutputStream escritor = new DataOutputStream(fos);
 
-            escritor.writeInt(valor);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            escritor.writeInt(numeroLibros);
+            escritor.writeInt(numeroColecciones);
+            oos.writeObject(libro);
         }catch (IOException e){
             e.printStackTrace();
             System.out.println("Error entrada - salida"+e.getMessage());

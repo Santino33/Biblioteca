@@ -63,7 +63,11 @@ public class View {
                 "6. Guardar datos en el archivo\n"+
                 "7. Cargar datos desde el archivo\n"+
                 "8. Mostrar colecciones bibliograficas\n"+
-                "9. Eliminar todos los datos";
+                "9. Eliminar todos los datos\n"+
+                "10. Crear binaries con libro especial\n"+
+                "11. Crear copia de seguridad(Serializar)\n"+
+                "12. Usar copia de seguridad (Deserializar)";
+
 
         return readMenu(output);
     }
@@ -113,6 +117,21 @@ public class View {
             output.append(CB.getNombre()).append("                          ").append(CB.getNumeroLibros() + "\n");
         }
         showGraphicMessage(output.toString());
+    }
+
+    public void mostrarDatosEspeciales(int librosTotales, int numeroColecciones, Libro libroEspecial){
+        String output = "Libros totales en la biblioteca: " + librosTotales + "\n" +
+                "Numero de colecciones bibliograficas: " + numeroColecciones + "\n\n" +
+                "El libro especial es: " +
+                "\nID: " + libroEspecial.getId() +
+                "\nTitulo: " + libroEspecial.getTitulo() +
+                "\nAutor: " + libroEspecial.getAutor() +
+                "\nEditorial: " + libroEspecial.getEditorial() +
+                "\nArea de conocimiento: " + libroEspecial.getAreaConocimiento() +
+                "\nEstado: " + libroEspecial.getEstado() + "\n\n";
+        showGraphicMessage(String.valueOf(output));
+
+
     }
 
     public boolean eliminarArchivo(String message){

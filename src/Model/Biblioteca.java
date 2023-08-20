@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Biblioteca {
+public class Biblioteca implements Serializable {
 
     ArrayList<ColeccionBibliografica> CB ;
     String rutaArchivo;
@@ -147,6 +148,18 @@ public class Biblioteca {
 
     public int getNumeroHistoricoLibros(){
         return numeroHistoricoLibros;
+    }
+
+    public int getNumeroTotalLibros(){
+        int librosTotal = 0;
+        for (ColeccionBibliografica CB: CB){
+            librosTotal += CB.getNumeroLibros();
+        }
+        return librosTotal;
+    }
+
+    public int getNumeroColecciones(){
+        return CB.size();
     }
 
     public void setNumeroHistoricoLibros(int numeroHistoricoLibros) {

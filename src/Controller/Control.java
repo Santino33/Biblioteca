@@ -6,6 +6,7 @@ import Model.ColeccionBibliografica;
 import Model.Libro;
 import Persistence.BinariesFile;
 import Persistence.PropertiesFile;
+import Persistence.SerializableFile;
 import Persistence.myFile;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,12 @@ public class Control {
     String nombreArchivo;
     String nombreProperties;
     String nombreBinaries;
+    String nombreSerializable;
     View view;
     myFile datosFile;
     PropertiesFile propertiesFile;
     BinariesFile binariesFile;
+    SerializableFile serializableFile;
     Biblioteca biblio;
 
 
@@ -34,8 +37,12 @@ public class Control {
         this.rutaArchivo = "C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/data/";
         this.nombreArchivo = "colecciones.txt";
         this.nombreProperties = "props.properties";
+        this.nombreBinaries = "binaries.bin";
+        this.nombreSerializable = "serial.ser";
         this.datosFile = new myFile();
         this.propertiesFile = new PropertiesFile(rutaArchivo + nombreProperties);
+        this.binariesFile = new BinariesFile(rutaArchivo + nombreBinaries);
+        this.serializableFile = new SerializableFile(rutaArchivo + nombreSerializable);
         this.biblio = new Biblioteca();
     }
 
@@ -70,6 +77,10 @@ public class Control {
             case 7 -> cargarArchivo();
             case 8 -> mostrarColecciones();
             case 9 -> eliminarArchivo();
+            case 10 ->leerDatosBin();
+            case 11 ->serializarBiblioteca();
+            case 12 -> deserializarBiblioteca();
+            //case 11 ->mostrarDatosBin();
             default -> defaultMenuMethod();
         }
     }
@@ -83,8 +94,34 @@ public class Control {
         manageApp();
     }
 
+    public void serializarBiblioteca(){
+        serializableFile.PersistirObjeto(biblio);
+        manageApp();
+    }
+    public void deserializarBiblioteca(){
+        Biblioteca biblio = serializableFile.deSerializarObjeto();
+        setBiblio(biblio);
+        manageApp();
+    }
+
+    private void leerDatosBin(){
+        int id = biblio.getNumeroHistoricoLibros() + 1001;
+
+        String titulo = view.readLibro("Ingresa el titulo del libro especial");
+        String autor = view.readLibro("Ingresa el autor del libro especial");
+        String editorial = view.readLibro("Ingresa la editorial del libro especial");
+        String areaConocimiento = view.readLibro("Ingresa el area de conocimiento del libro especial");
+        biblio.setFechaUltimoCambio(getCurrentTime());
+
+        Libro libroEspecial = new Libro(id, titulo, autor, editorial, areaConocimiento, "Disponible");
+        int librosTotales = biblio.getNumeroTotalLibros();
+        int coleccionTotales = biblio.getNumeroColecciones();
+        System.out.println("(Escritura)Numero total libros de la biblioteca: "+biblio.getNumeroTotalLibros());
 
 
+        binariesFile.escrituraDatos(librosTotales, coleccionTotales, libroEspecial);
+        manageApp();
+    }
     /*
     public void cargarArchivo(){
         //Se cargan datos del archivo al arraylist
@@ -197,6 +234,14 @@ public class Control {
         ArrayList<ColeccionBibliografica> CB = biblio.getCB();
         view.mostrarLibros(CB, biblio.getFechaUltimoCambio());
         manageApp();
+    }
+
+    public Biblioteca getBiblio() {
+        return biblio;
+    }
+
+    public void setBiblio(Biblioteca biblio) {
+        this.biblio = biblio;
     }
 
     public String getCurrentTime(){
