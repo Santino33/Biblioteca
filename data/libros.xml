@@ -1,0 +1,25 @@
+<?xml version = "1.0"?>
+<class>
+    <libro>
+        <id>1</id>
+        <titulo>Fundamentos de programación</titulo>
+        <autores numero="2">
+            <autor>
+                <nombre>Jose Cerrada</nombre>
+            </autor>
+            <autor>
+                <nombre>Manuel Collado</nombre>
+            </autor>
+        </autores>
+    </libro>
+
+	<libro>
+        <id>2</id>
+        <titulo>Biología general</titulo>
+        <autores numero="1">
+            <autor>
+                <nombre>Julian Monge</nombre>
+            </autor>
+        </autores>
+    </libro>
+</class>

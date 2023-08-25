@@ -4,10 +4,7 @@ import Iomanager.View;
 import Model.Biblioteca;
 import Model.ColeccionBibliografica;
 import Model.Libro;
-import Persistence.BinariesFile;
-import Persistence.PropertiesFile;
-import Persistence.SerializableFile;
-import Persistence.myFile;
+import Persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,11 +20,13 @@ public class Control {
     String nombreProperties;
     String nombreBinaries;
     String nombreSerializable;
+    String nombreXml;
     View view;
     myFile datosFile;
     PropertiesFile propertiesFile;
     BinariesFile binariesFile;
     SerializableFile serializableFile;
+    XmlFile xmlFile;
     Biblioteca biblio;
 
 
@@ -39,10 +38,12 @@ public class Control {
         this.nombreProperties = "props.properties";
         this.nombreBinaries = "binaries.bin";
         this.nombreSerializable = "serial.ser";
+        this.nombreXml = "datos.xml";
         this.datosFile = new myFile();
         this.propertiesFile = new PropertiesFile(rutaArchivo + nombreProperties);
         this.binariesFile = new BinariesFile(rutaArchivo + nombreBinaries);
         this.serializableFile = new SerializableFile(rutaArchivo + nombreSerializable);
+        this.xmlFile = new XmlFile(rutaArchivo + nombreXml);
         this.biblio = new Biblioteca();
     }
 
@@ -80,6 +81,7 @@ public class Control {
             case 10 ->leerDatosBin();
             case 11 ->serializarBiblioteca();
             case 12 -> deserializarBiblioteca();
+            case 13 -> guardarXmlFile();
             //case 11 ->mostrarDatosBin();
             default -> defaultMenuMethod();
         }
@@ -93,6 +95,15 @@ public class Control {
         biblio.setFechaUltimoCambio(propertiesFile.getValue("fechaUltimoCambio"));
         manageApp();
     }
+
+
+    public void guardarXmlFile(){
+        ArrayList<ColeccionBibliografica> CBS = biblio.getCB();
+        xmlFile.escribirXMLFile(CBS);
+        manageApp();
+    }
+
+
 
     public void serializarBiblioteca(){
         serializableFile.PersistirObjeto(biblio);

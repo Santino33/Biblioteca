@@ -66,7 +66,9 @@ public class View {
                 "9. Eliminar todos los datos\n"+
                 "10. Crear binaries con libro especial\n"+
                 "11. Crear copia de seguridad(Serializar)\n"+
-                "12. Usar copia de seguridad (Deserializar)";
+                "12. Usar copia de seguridad (Deserializar)\n"+
+                "13. Escribir en el Xml";
+
 
 
         return readMenu(output);
