@@ -2,10 +2,7 @@ package Persistence;
 
 import Model.ColeccionBibliografica;
 import Model.Libro;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
+import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -14,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 
@@ -27,63 +25,27 @@ public class XmlFile {
         this.xmlFile = new File(pathName);
     }
 
-    //
-    public void leerXMLFilePractica(){
-        File inputFile = new File("C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/data/libros.xml");
-        ArrayList<ColeccionBibliografica> CBS = new ArrayList<ColeccionBibliografica>();
-        SAXBuilder saxBuilder = new SAXBuilder();
-        try {
-            Document documento = saxBuilder.build(inputFile);
-            Element elementoInicial = documento.getRootElement();
-
-            List<Element> listaLibros = elementoInicial.getChildren();
-
-            for (int i = 0; i < listaLibros.size(); i++) {
-                Element libro= listaLibros.get(i);
-                System.out.println("\nElemento :" + libro.getName());
-                System.out.println("Id: " + libro.getChild("id").getText());
-                System.out.println("Nombre: " + libro.getChild("titulo").getText());
-
-                Element autores = libro.getChild("autores");
-                System.out.println("\nElemento :" + autores.getName());
-                Attribute atributo =  autores.getAttribute("numero");
-                System.out.println("Número de autores: "+ atributo.getValue() );
-                List<Element> autoresLista = autores.getChildren("autor");
-                for (int j = 0; j < autoresLista.size(); j++) {
-                    Element autor = autoresLista.get(j);
-
-                    System.out.println("Nombre: " + autor.getChild("nombre").getText());
-                }
-            }
-
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void escribirXMLFile(ArrayList<ColeccionBibliografica> CBS){
+    public void escribirXMLFile(ArrayList<ColeccionBibliografica> CBS) {
         /*
         No es necesario utilizar el metodo build de saxBuilder, ya que este analiza un
         documento que ya tenga contenido pero en este caso el archivo podria estar vacio
          */
         File datos = xmlFile;
-        try{
+        try {
             crearXML();
             Document xmlFile = new Document();
-            Element elementoRoot = new Element("crearXML");
+            Element elementoRoot = new Element("biblioteca");
             xmlFile.setRootElement(elementoRoot);
             //Obtener el elemento raiz
             List<Element> listaColeciones = elementoRoot.getChildren();
             //Eliminar colecciones existentes
             listaColeciones.clear();
             //Recorrer el arraylist
-            for (ColeccionBibliografica CB : CBS){
+            for (ColeccionBibliografica CB : CBS) {
                 //Crear coleccion
                 String nombreColeccion = CB.getNombre();
                 Element nuevaColeccion = new Element(nombreColeccion);
-                for (Libro libro: CB.getLibros().values()){
+                for (Libro libro : CB.getLibros().values()) {
                     Element nuevoLibro = new Element("libro");
                     nuevoLibro.setAttribute("id", String.valueOf(libro.getId()));
                     Element titulo = new Element("titulo");
@@ -118,33 +80,98 @@ public class XmlFile {
             // Guardar los cambios en el archivo XML
             XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
             xmlOutputter.output(xmlFile, new FileWriter(datos));
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error Entrada - salida: " +e.getMessage());
+            System.out.println("Error Entrada - salida: " + e.getMessage());
         }
     }
 
-    public ArrayList<ColeccionBibliografica> leerXMLFile(){
-        ArrayList<ColeccionBibliografica>CBS = new ArrayList<ColeccionBibliografica>();
+    public ArrayList<ColeccionBibliografica> leerXMLFile() {
+        ArrayList<ColeccionBibliografica> CBS = new ArrayList<ColeccionBibliografica>();
         File datos = xmlFile;
         SAXBuilder saxBuilder = new SAXBuilder();
-        try{
+        try {
             Document xmlFile = saxBuilder.build(datos);
-            //Obtener el elemento raiz
             Element elementoRoot = xmlFile.getRootElement();
-            List<Element> listaElementos = elementoRoot.getChildren();
-            for (Element colecccion : listaElementos){
-                Element libro = colecccion.getChild("");
+            List<Element> listaColecciones = elementoRoot.getChildren();
+
+            for (Element coleccion : listaColecciones) {
+                String areaConocimiento = coleccion.getName();
+                ColeccionBibliografica CB = new ColeccionBibliografica(areaConocimiento);
+
+                List<Element> libros = coleccion.getChildren();
+                for (Element libro : libros) {
+                    int id = Integer.parseInt(libro.getAttributeValue("id"));
+                    String titulo = libro.getChildText("titulo");
+                    String autor = libro.getChildText("autor");
+                    String editorial = libro.getChildText("editorial");
+                    String estado = libro.getChildText("estado");
+
+                    Libro libroRecuperado = new Libro(id, titulo, autor, editorial, areaConocimiento, estado);
+                    CB.agregarLibro(libroRecuperado);
+                }
+                CBS.add(CB);
             }
-        }catch (JDOMException e){
+        } catch (JDOMException e) {
             e.printStackTrace();
-            System.out.println("Error JDOM: " +e.getMessage());
-        }catch (IOException e){
+            System.out.println("Error JDOM: " + e.getMessage());
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error Entrada - salida: " +e.getMessage());
+            System.out.println("Error Entrada - salida: " + e.getMessage());
         }
         return CBS;
+    }
+
+    //EJERCICIO LEER CUALQUIER XML
+    public void leerCualquierXml() {
+        File file = new File("C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/data/datos.xml");
+        SAXBuilder saxBuilder = new SAXBuilder();
+        String output = "";
+        try {
+            Document document = saxBuilder.build(file);
+            Element elementoRoot = document.getRootElement();
+            output = leerDatos(elementoRoot, 0);
+        } catch (JDOMException e) {
+            e.printStackTrace();
+            System.out.println("Error JDOM: " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error Entrada - salida: " + e.getMessage());
+        }
+        imprimirSB(output);
+    }
+    private String leerDatos(Element element, int nivel){
+        String identacion = getIdentacion(nivel);
+        if (!hasChildren(element)){
+            identacion += element.getName() +":  ";
+            identacion += element.getText();
+        }
+        List<Element> childs = element.getChildren();
+        for (Element child : childs) {
+            identacion += leerDatos(child, nivel +1);
+        }
+        return identacion;
+    }
+
+    private String getIdentacion(int nivel) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < nivel; i++) {
+        sb.append("\n");
+    }
+    return sb.toString();
+    }
+
+
+
+    private boolean hasChildren(Element element){
+        boolean hasChildren = false;
+        List<Element> children = element.getChildren();
+        if (children.size() > 0) hasChildren = true;
+        return hasChildren;
+    }
+
+    private void imprimirSB(String texto){
+        System.out.println(texto);
     }
 
     public boolean crearXML(){
@@ -160,10 +187,5 @@ public class XmlFile {
         }
         return created;
     }
-
-
-
-
-
 
 }

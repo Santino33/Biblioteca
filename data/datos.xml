@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<crearXML>
-  <Literatura>
+<biblioteca>
+  <Administrativo>
     <libro id="1001">
-      <titulo>El resplandor</titulo>
-      <autor>S.King</autor>
-      <editorial>Acechante</editorial>
-      <areaConocimiento>Literatura</areaConocimiento>
+      <titulo>Contratos 1</titulo>
+      <autor>Contador</autor>
+      <editorial>Empresa</editorial>
+      <areaConocimiento>Administrativo</areaConocimiento>
       <estado>Disponible</estado>
     </libro>
-  </Literatura>
-  <Economia>
     <libro id="1002">
-      <titulo>Microeconomia</titulo>
-      <autor>K.Akkerman</autor>
-      <editorial>Casa blanca</editorial>
-      <areaConocimiento>Economia</areaConocimiento>
+      <titulo>Contratos 2</titulo>
+      <autor>Contador</autor>
+      <editorial>Empresa</editorial>
+      <areaConocimiento>Administrativo</areaConocimiento>
       <estado>Disponible</estado>
     </libro>
     <libro id="1003">
-      <titulo>Macroeconomia</titulo>
-      <autor>K.Akkerman</autor>
-      <editorial>Casa blanca</editorial>
-      <areaConocimiento>Economia</areaConocimiento>
+      <titulo>Contratos 3</titulo>
+      <autor>Contador</autor>
+      <editorial>Empresa</editorial>
+      <areaConocimiento>Administrativo</areaConocimiento>
       <estado>Disponible</estado>
     </libro>
-  </Economia>
-  <Matematicas>
     <libro id="1004">
-      <titulo>Algebra lineal</titulo>
-      <autor>S. grossman</autor>
-      <editorial>Graphycs</editorial>
+      <titulo>Demanda 1</titulo>
+      <autor>Abogado</autor>
+      <editorial>Empresa</editorial>
+      <areaConocimiento>Administrativo</areaConocimiento>
+      <estado>Disponible</estado>
+    </libro>
+    <libro id="1005">
+      <titulo>Demanda 2</titulo>
+      <autor>Abogado</autor>
+      <editorial>Empresa</editorial>
+      <areaConocimiento>Administrativo</areaConocimiento>
+      <estado>Disponible</estado>
+    </libro>
+  </Administrativo>
+  <Fisica>
+    <libro id="1006">
+      <titulo>Fisica 1</titulo>
+      <autor>J.Alvarez</autor>
+      <editorial>Fisicos lati</editorial>
+      <areaConocimiento>Fisica</areaConocimiento>
+      <estado>Disponible</estado>
+    </libro>
+  </Fisica>
+  <Matematicas>
+    <libro id="1007">
+      <titulo>Metodos numericos</titulo>
+      <autor>Zill</autor>
+      <editorial>Inges</editorial>
       <areaConocimiento>Matematicas</areaConocimiento>
-      <estado>En prestamo</estado>
+      <estado>Disponible</estado>
     </libro>
   </Matematicas>
-  <Historia>
-    <libro id="1005">
-      <titulo>Oligarquias</titulo>
-      <autor>J. Alvarez</autor>
-      <editorial>Campeantes</editorial>
-      <areaConocimiento>Historia</areaConocimiento>
+  <Medicina>
+    <libro id="1008">
+      <titulo>Anatomia</titulo>
+      <autor>Akkerman</autor>
+      <editorial>Fisioco</editorial>
+      <areaConocimiento>Medicina</areaConocimiento>
       <estado>Disponible</estado>
     </libro>
-  </Historia>
-  <Quimica>
-    <libro id="1006">
-      <titulo>Organica</titulo>
-      <autor>M. Estupiñan</autor>
-      <editorial>Boyaca</editorial>
-      <areaConocimiento>Quimica</areaConocimiento>
-      <estado>Disponible</estado>
-    </libro>
-  </Quimica>
-  <Filosofia>
-    <libro id="1007">
-      <titulo>Maquiavelo</titulo>
-      <autor>Maquiavelo</autor>
-      <editorial>casa azul</editorial>
-      <areaConocimiento>Filosofia</areaConocimiento>
-      <estado>Disponible</estado>
-    </libro>
-  </Filosofia>
-</crearXML>
+  </Medicina>
+</biblioteca>

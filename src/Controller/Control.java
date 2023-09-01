@@ -21,12 +21,16 @@ public class Control {
     String nombreBinaries;
     String nombreSerializable;
     String nombreXml;
+    String nombreSerialUsersXml;
+    String nombreSerialAdminXml;
     View view;
     myFile datosFile;
     PropertiesFile propertiesFile;
     BinariesFile binariesFile;
     SerializableFile serializableFile;
     XmlFile xmlFile;
+    SerialXml serialXmlUsers;
+    SerialXml serialXmlAdmin;
     Biblioteca biblio;
 
 
@@ -39,11 +43,15 @@ public class Control {
         this.nombreBinaries = "binaries.bin";
         this.nombreSerializable = "serial.ser";
         this.nombreXml = "datos.xml";
+        this.nombreSerialUsersXml = "serialUsers.xml";
+        this.nombreSerialAdminXml = "serialAdmin.xml";
         this.datosFile = new myFile();
         this.propertiesFile = new PropertiesFile(rutaArchivo + nombreProperties);
         this.binariesFile = new BinariesFile(rutaArchivo + nombreBinaries);
         this.serializableFile = new SerializableFile(rutaArchivo + nombreSerializable);
         this.xmlFile = new XmlFile(rutaArchivo + nombreXml);
+        this.serialXmlUsers = new SerialXml(rutaArchivo + nombreSerialUsersXml);
+        this.serialXmlAdmin = new SerialXml(rutaArchivo + nombreSerialAdminXml);
         this.biblio = new Biblioteca();
     }
 
@@ -78,13 +86,35 @@ public class Control {
             case 7 -> cargarArchivo();
             case 8 -> mostrarColecciones();
             case 9 -> eliminarArchivo();
-            case 10 ->leerDatosBin();
-            case 11 ->serializarBiblioteca();
+            case 10 -> leerDatosBin();
+            case 11 -> serializarBiblioteca();
             case 12 -> deserializarBiblioteca();
             case 13 -> guardarXmlFile();
+            case 14 -> leerXmlFile();
+            case 15 -> serializarAdministrativos();
+            case 16 -> deserializarAdministrativos();
             //case 11 ->mostrarDatosBin();
             default -> defaultMenuMethod();
         }
+    }
+
+    private void serializarAdministrativos(){
+        ArrayList<ColeccionBibliografica> CBS = biblio.getCB();
+        ColeccionBibliografica adminCB = new ColeccionBibliografica();
+        for (int i = 0; i < CBS.size(); i++) {
+            String nombre = CBS.get(i).getNombre();
+            if (nombre.equals("Administrativo")){
+                adminCB = CBS.get(i);
+            }
+        }
+        serialXmlAdmin.serializarObjeto(adminCB, "Coleccion");
+        manageApp();
+    }
+
+    private void deserializarAdministrativos(){
+        ColeccionBibliografica adminCB = (ColeccionBibliografica)serialXmlAdmin.deserializarObjeto("Coleccion");
+        view.mostrarColeccion(adminCB);
+        manageApp();
     }
 
     private void cargarArchivo(){
@@ -100,6 +130,13 @@ public class Control {
     public void guardarXmlFile(){
         ArrayList<ColeccionBibliografica> CBS = biblio.getCB();
         xmlFile.escribirXMLFile(CBS);
+        manageApp();
+    }
+
+    public void leerXmlFile(){
+        ArrayList<ColeccionBibliografica> CBS = xmlFile.leerXMLFile();
+        biblio.setFechaUltimoCambio(propertiesFile.getValue("fechaUltimoCambio"));
+        biblio.setCB(CBS);
         manageApp();
     }
 

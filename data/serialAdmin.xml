@@ -1,0 +1,61 @@
+<Model.ColeccionBibliografica>
+  <libros>
+    <entry>
+      <int>1001</int>
+      <Model.Libro>
+        <id>1001</id>
+        <titulo>Contratos 1</titulo>
+        <autor>Contador</autor>
+        <Editorial>Empresa</Editorial>
+        <areaConocimiento>Administrativo</areaConocimiento>
+        <estado>Disponible</estado>
+      </Model.Libro>
+    </entry>
+    <entry>
+      <int>1002</int>
+      <Model.Libro>
+        <id>1002</id>
+        <titulo>Contratos 2</titulo>
+        <autor>Contador</autor>
+        <Editorial>Empresa</Editorial>
+        <areaConocimiento>Administrativo</areaConocimiento>
+        <estado>Disponible</estado>
+      </Model.Libro>
+    </entry>
+    <entry>
+      <int>1003</int>
+      <Model.Libro>
+        <id>1003</id>
+        <titulo>Contratos 3</titulo>
+        <autor>Contador</autor>
+        <Editorial>Empresa</Editorial>
+        <areaConocimiento>Administrativo</areaConocimiento>
+        <estado>Disponible</estado>
+      </Model.Libro>
+    </entry>
+    <entry>
+      <int>1004</int>
+      <Model.Libro>
+        <id>1004</id>
+        <titulo>Demanda 1</titulo>
+        <autor>Abogado</autor>
+        <Editorial>Empresa</Editorial>
+        <areaConocimiento>Administrativo</areaConocimiento>
+        <estado>Disponible</estado>
+      </Model.Libro>
+    </entry>
+    <entry>
+      <int>1005</int>
+      <Model.Libro>
+        <id>1005</id>
+        <titulo>Demanda 2</titulo>
+        <autor>Abogado</autor>
+        <Editorial>Empresa</Editorial>
+        <areaConocimiento>Administrativo</areaConocimiento>
+        <estado>Disponible</estado>
+      </Model.Libro>
+    </entry>
+  </libros>
+  <nombre>Administrativo</nombre>
+  <numeroLibros>5</numeroLibros>
+</Model.ColeccionBibliografica>

@@ -2,6 +2,7 @@
   <library name="jdom-2.0.6.1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/jdom-2.0.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xstream-1.4.20.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

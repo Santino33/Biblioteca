@@ -67,7 +67,10 @@ public class View {
                 "10. Crear binaries con libro especial\n"+
                 "11. Crear copia de seguridad(Serializar)\n"+
                 "12. Usar copia de seguridad (Deserializar)\n"+
-                "13. Escribir en el Xml";
+                "13. Escribir en el Xml\n"+
+                "14. Leer datos desde el Xml\n"+
+                "15. Serializar coleccion administrativa\n"+
+                "16. Deserializar coleccion administrativa";
 
 
 
@@ -117,6 +120,19 @@ public class View {
         StringBuilder output = new StringBuilder("NOMBRE COLECCION    NUMERO LIBROS\n");
         for(ColeccionBibliografica CB: CBS){
             output.append(CB.getNombre()).append("                          ").append(CB.getNumeroLibros() + "\n");
+        }
+        showGraphicMessage(output.toString());
+    }
+
+    public void mostrarColeccion(ColeccionBibliografica CB){
+        StringBuilder output = new StringBuilder();
+        output.append("  ID       Titulo               Autor\n");
+        HashMap<Integer, Libro> libros = CB.getLibros();
+        for (Map.Entry<Integer, Libro> entry : libros.entrySet()) {
+            Integer clave = entry.getKey();
+            Libro libro = entry.getValue();
+            output.append(libro.getId()).append("    ").append(libro.getTitulo()).append("     ").append(libro.getAutor());
+            output.append("\n");
         }
         showGraphicMessage(output.toString());
     }
