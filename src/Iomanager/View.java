@@ -53,6 +53,19 @@ public class View {
         return JOptionPane.showInputDialog(null, message, "LOGIN", JOptionPane.PLAIN_MESSAGE, scaleImage(book), null, null).toString();
     }
 
+    public String register(String message){
+        ImageIcon book = new ImageIcon("C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/src/Iomanager/log.jpeg");
+        return JOptionPane.showInputDialog(null, message, "REGISTRO", JOptionPane.PLAIN_MESSAGE, scaleImage(book), null, null).toString();
+    }
+    public int sesion(){
+        ImageIcon book = new ImageIcon("C:/Users/willi/Universidad/3 SEMESTRE/programacion 2/Biblioteca/src/Iomanager/log.jpeg");
+        String message = "Digite la opcion de ingreso que desea\n"
+                + "1. Iniciar sesion con usuario existente\n"
+                + "2. Registrarse\n"
+                + "3.Volver al menu";
+        return (int) JOptionPane.showInputDialog(null, message, "Bienvenida a la biblioteca", JOptionPane.PLAIN_MESSAGE, scaleImage(book), null, null);
+    }
+
     public int mostrarMenuPrincipal(){
         String output = "Bienvenido a la biblioteca central, estos son nuestros servicios: \n"+
                 "1. Registrar libro\n"+
@@ -70,7 +83,9 @@ public class View {
                 "13. Escribir en el Xml\n"+
                 "14. Leer datos desde el Xml\n"+
                 "15. Serializar coleccion administrativa\n"+
-                "16. Deserializar coleccion administrativa";
+                "16. Deserializar coleccion administrativa\n"+
+                "17. Guardar a Json\n"+
+                "18. Traer desde json";
 
 
 

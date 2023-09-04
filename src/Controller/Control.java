@@ -1,17 +1,13 @@
 package Controller;
 
 import Iomanager.View;
-import Model.Biblioteca;
-import Model.ColeccionBibliografica;
-import Model.Libro;
+import Model.*;
 import Persistence.*;
 
+import javax.swing.text.Element;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.*;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Control {
 
@@ -23,6 +19,7 @@ public class Control {
     String nombreXml;
     String nombreSerialUsersXml;
     String nombreSerialAdminXml;
+    String nombreJson;
     View view;
     myFile datosFile;
     PropertiesFile propertiesFile;
@@ -31,6 +28,7 @@ public class Control {
     XmlFile xmlFile;
     SerialXml serialXmlUsers;
     SerialXml serialXmlAdmin;
+    JsonFile jsonFile;
     Biblioteca biblio;
 
 
@@ -45,6 +43,7 @@ public class Control {
         this.nombreXml = "datos.xml";
         this.nombreSerialUsersXml = "serialUsers.xml";
         this.nombreSerialAdminXml = "serialAdmin.xml";
+        this.nombreJson = "jsonBiblio.json";
         this.datosFile = new myFile();
         this.propertiesFile = new PropertiesFile(rutaArchivo + nombreProperties);
         this.binariesFile = new BinariesFile(rutaArchivo + nombreBinaries);
@@ -52,26 +51,65 @@ public class Control {
         this.xmlFile = new XmlFile(rutaArchivo + nombreXml);
         this.serialXmlUsers = new SerialXml(rutaArchivo + nombreSerialUsersXml);
         this.serialXmlAdmin = new SerialXml(rutaArchivo + nombreSerialAdminXml);
+        this.jsonFile = new JsonFile(rutaArchivo + nombreJson);
         this.biblio = new Biblioteca();
     }
 
     public void app(){
+        /*
         if (!login()) {
             view.showGraphicErrorMessage("Usuario o contraseña incorrectos");
             app();
         }
+
+         */
         manageApp();
     }
 
     public boolean login(){
+        boolean success = false;
+        int option = view.sesion();
         if (propertiesFile.crearArchivo()){
             propertiesFile.crearPropiedad("userAdmin", "admin12345");
         }
-        //propertiesFile.createPropertiesFile(rutaProp, "userAdmin", "admin12345" );
-        //propertiesFile.createPropertiesFile(rutaProp, "fechaUltimoCambio",  "" );
         String username = view.login("Ingrese su nombre de usuario");
         String password = view.login("Ingrese su contraseña");
-        return password.equals(propertiesFile.getValue(username));
+        if (option == 1){
+            crearUsuario(username, password);
+            success = iniciarSesion(username, password);
+        }
+        else if (option == 2){
+            success = iniciarSesion(username, password);
+        }
+        else manageApp();
+        if (password.equals(propertiesFile.getValue(username))) success = true;
+
+        return success;
+    }
+
+    private void crearUsuario(String username, String password){
+        //Verificar nombre de usuario
+        Usuarios usuariosElement = (Usuarios) serialXmlUsers.deserializarObjeto("usuarios");
+        ArrayList<Usuario> usuarios = usuariosElement.getUsuarios();
+        for (Usuario usuario : usuarios){
+            if (usuario.getNombreUsuario().equals(username)){
+                view.showGraphicErrorMessage("El nombre de usuario no disponible");
+                login();
+            }
+        }
+        //Crear usuario
+        Usuario user = new Usuario(username, password);
+        serialXmlUsers.serializarObjeto(user, "usuarios");
+    }
+    private boolean iniciarSesion(String username, String password){
+        Usuarios usuariosElement = (Usuarios) serialXmlUsers.deserializarObjeto("usuarios");
+        ArrayList<Usuario> usuarios = usuariosElement.getUsuarios();
+        for (Usuario usuario : usuarios){
+            if (usuario.getNombreUsuario().equals(username)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void manageApp(){
@@ -93,9 +131,23 @@ public class Control {
             case 14 -> leerXmlFile();
             case 15 -> serializarAdministrativos();
             case 16 -> deserializarAdministrativos();
+            case 17 -> guardarJsonFile();
+            case 18 -> importarJsonFile();
             //case 11 ->mostrarDatosBin();
             default -> defaultMenuMethod();
         }
+    }
+
+    private void guardarJsonFile(){
+        jsonFile.escribirDatos(biblio.getCB());
+        manageApp();
+    }
+
+    private void importarJsonFile(){
+        ArrayList<ColeccionBibliografica> CBS = jsonFile.importarDatos();
+        biblio.setFechaUltimoCambio(propertiesFile.getValue("fechaUltimoCambio"));
+        biblio.setCB(CBS);
+        manageApp();
     }
 
     private void serializarAdministrativos(){
